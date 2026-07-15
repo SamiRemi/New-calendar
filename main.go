@@ -28,5 +28,6 @@ func main() {
 	}
 
 	calendar.ShowEvents()
+	fmt.Println("Все ради тестов")
 
 }
