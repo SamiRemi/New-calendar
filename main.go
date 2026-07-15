@@ -29,5 +29,6 @@ func main() {
 
 	calendar.ShowEvents()
 	fmt.Println("Все ради тестов")
+	fmt.Println("Все ради тестов дубль 2")
 
 }
