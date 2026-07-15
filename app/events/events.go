@@ -7,9 +7,11 @@ import (
 
 	"github.com/SamiRemi/project/app/validation"
 	"github.com/araddon/dateparse"
+	"github.com/google/uuid"
 )
 
 type Event struct {
+	ID      string
 	Title   string
 	StartAt time.Time
 }
@@ -23,6 +25,7 @@ func NewEvent(title string, dateStr string) (Event, error) {
 		return Event{}, errors.New("Неверный формат даты")
 	}
 	return Event{
+		ID:      getNextID(),
 		Title:   title,
 		StartAt: t,
 	}, nil
@@ -41,4 +44,7 @@ func (e *Event) Update(title string, dateStr string) error {
 	e.Title = title
 	e.StartAt = time
 	return nil
+}
+func getNextID() string {
+	return uuid.New().String()
 }

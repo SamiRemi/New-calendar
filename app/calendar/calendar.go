@@ -8,31 +8,36 @@ import (
 	"github.com/araddon/dateparse"
 )
 
-var eventsMap = make(map[string]events.Event)
+var calendarEvents = make(map[string]events.Event)
 
-func AddEvent(key string, e events.Event) {
-	eventsMap[key] = e
-	fmt.Println("Событие добавлено:", e.Title)
+func AddEvent(title string, date string) (events.Event, error) {
+	e, err := events.NewEvent(title, date)
+	if err != nil {
+		return e, fmt.Errorf("Ошибка создание события %s\n", title)
+	}
+
+	calendarEvents[e.ID] = e
+	return e, nil
 }
 
 func ShowEvents() {
-	for _, e := range eventsMap {
+	for _, e := range calendarEvents {
 		fmt.Printf("\nСобытие: %s || Дата:%s\n ", e.Title, e.StartAt.Format("2006-01-02 15:04"))
 	}
 }
 
 func DeleteEvent(title string) error {
-	_, exists := eventsMap[title]
+	_, exists := calendarEvents[title]
 	if !exists {
 		return fmt.Errorf("Событие с заголовком %q не найдено\n", title)
 	}
-	delete(eventsMap, title)
+	delete(calendarEvents, title)
 	fmt.Printf("Событие %q успешно удалено\n", title)
 	return nil
 }
 
 func EditEvent(key, title, startAt string) error {
-	e, exists := eventsMap[key]
+	e, exists := calendarEvents[key]
 	if !exists {
 		return fmt.Errorf("событие с ключом %q не найдено", key)
 	}
@@ -49,7 +54,7 @@ func EditEvent(key, title, startAt string) error {
 	e.Title = title
 	e.StartAt = t
 
-	eventsMap[key] = e
+	calendarEvents[key] = e
 
 	return nil
 }
